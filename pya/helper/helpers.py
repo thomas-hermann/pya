@@ -51,34 +51,22 @@ def normalize(d):
     return d
 
 
-def audio_from_file(path: str, dtype=np.float32):
-    '''Load an audio buffer using audioread.
-    This loads one block at a time, and then concatenates the results.
+def audio_from_file(path: str):
+    '''Load an audio buffer using audio_read.
+    Returns a tuple of (samples, samplerate) where samples is a numpy float32 array.
     '''
-    y = []  # audio array
+    y = []
     with audio_read(path) as input_file:
         sr_native = input_file.samplerate
-        n_channels = input_file.channels
-        s_start = 0
-        s_end = np.inf
-        n = 0
-        for frame in input_file:
-            frame = buf_to_float(frame, dtype=dtype)
-            n_prev = n
-            n = n + len(frame)
-            if n_prev <= s_start <= n:
-                # beginning is in this frame
-                frame = frame[(s_start - n_prev):]
-            # tack on the current frame
-            y.append(frame)
+        for block in input_file.read_data():
+            y.append(block)
 
     if y:
-        y = np.concatenate(y)
-        if n_channels > 1:
-            y = y.reshape((-1, n_channels))
+        y = np.vstack(y) if len(y[0].shape) > 1 else np.concatenate(y)
     else:
-        y = np.empty(0, dtype=dtype)
+        y = np.array([], dtype=np.float32)
         sr_native = 0
+
     return y, sr_native
 
 
