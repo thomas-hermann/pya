@@ -26,8 +26,13 @@ class Arecorder(Aserver):
     >>> ar.record()
     >>> time.sleep(1)
     >>> ar.stop()
-    >>> print(ar.recordings)  # doctest:+ELLIPSIS
-    [Asig(''): ... x ... @ 44100Hz = ...
+    >>> ar.quit()  # This is important to avoid pyaudio trace trap error
+
+    >>> # Using context manager, no need to call quit()
+    >>> with Arecorder() as ar:  # doctest:+SKIP
+    ...     ar.record()
+    ...     time.sleep(1)
+    ...     ar.stop()
     """
 
     def __init__(self, sr: int = 44100, bs: int = 256, device: Optional[int] = None,

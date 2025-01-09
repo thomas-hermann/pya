@@ -27,6 +27,7 @@ class Aserver:
     >>> asine = Ugen().sine()
     >>> asine.play(server=ser)
     Asig('sine'): 1 x 44100 @ 44100Hz = 1.000s cn=['0']
+    >>> ser.quit()  # Important to call quit() to close the stream when you are done. Or use context manager.
     """
 
     default = None  # that's the default Aserver if Asigs play via it
@@ -213,7 +214,6 @@ class Aserver:
         except AttributeError:
             _LOGGER.info("No stream found...")
         self.stream = None
-        return 0
 
     def play(self, asig, onset: Union[int, float] = 0, out: int = 0, **kwargs):
         """Dispatch asigs or arrays for given onset.
@@ -317,10 +317,16 @@ class Aserver:
         return self.boot()
 
     def __exit__(self, exc_type, exc_value, traceback):
+        """Context manager exit"""
+        _LOGGER.info("Exiting context manager. Cleaning up stream and backend")
         self.quit()
         self.backend.terminate()
 
     def __del__(self):
-        self.quit()
-        self.backend.terminate()
-
+        """Backup cleanup, only if context manager wasn't used"""
+        if hasattr(self, 'stream') and self.stream is not None:
+            try:
+                self.quit()
+                self.backend.terminate()
+            except:
+                pass  # Ignore cleanup errors during shutdown

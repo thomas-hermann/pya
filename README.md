@@ -253,3 +253,20 @@ Asig methods usually return an Asig, so methods can be chained, e.g
 ## Contributing 
 * Please get in touch with us if you wish to contribute. We are happy to be involved in the discussion of new features and to receive pull requests.
 
+### Local development
+
+For local development, start your own virtual environment then: `pip install -e .`
+
+Example to set logging level to see pya logging:
+
+```Python
+import logging
+logger = logging.getLogger('pya')  # Get the pya logger
+logger.setLevel(logging.INFO)
+# Create console handler with formatting
+ch = logging.StreamHandler()
+ch.setLevel(logging.INFO)
+formatter = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
+ch.setFormatter(formatter)
+logger.addHandler(ch)
+```

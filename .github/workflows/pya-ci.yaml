@@ -30,6 +30,7 @@ jobs:
       run: brew install portaudio
     - uses: conda-incubator/setup-miniconda@v2
       with:
+        miniconda-version: "latest"
         activate-environment: test-env
         environment-file: ci/test-environment.yml
         python-version: ${{ matrix.python-version }}
