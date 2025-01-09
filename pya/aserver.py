@@ -27,6 +27,7 @@ class Aserver:
     >>> asine = Ugen().sine()
     >>> asine.play(server=ser)
     Asig('sine'): 1 x 44100 @ 44100Hz = 1.000s cn=['0']
+    >>> ser.quit()  # Important to call quit() to close the stream when you are done. Or use context manager.
     """
 
     default = None  # that's the default Aserver if Asigs play via it
