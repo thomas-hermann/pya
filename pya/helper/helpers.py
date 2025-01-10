@@ -117,10 +117,10 @@ def device_info():
     devs = [pa.get_device_info_by_index(i) for i in range(pa.get_device_count())]
     lines = [line1]
     for i, d in enumerate(devs):
-        p1 = f"{i:<4g}{d['name'].strip():24}{d['maxInputChannels']:4}{d['maxOutputChannels']:4}"
-        p2 = f" {int(d['defaultSampleRate'])} "
-        p3 = f"{d['defaultLowInputLatency']*1000:6.2g} {d['defaultHighInputLatency']*1000:6.0f}"
-        p4 = f"{d['defaultLowOutputLatency']*1000:6.2g} {d['defaultHighOutputLatency']*1000:6.0f}"
+        p1 = f"{i:<4g}{d['name'].strip():24}{d['maxinputchannels']:4}{d['maxoutputchannels']:4}"
+        p2 = f" {int(d['defaultsamplerate'])} "
+        p3 = f"{d['defaultLowInputLatency'] * 1000:6.2g} {d['defaultHighInputLatency'] * 1000:6.0f}"
+        p4 = f"{d['defaultLowOutputLatency'] * 1000:6.2g} {d['defaultHighOutputLatency'] * 1000:6.0f}"
         lines.append(p1 + p2 + p3 + p4)
     print(*lines, sep='\n')
     return devs
